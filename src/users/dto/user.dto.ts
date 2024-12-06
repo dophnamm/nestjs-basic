@@ -1,6 +1,8 @@
 import { IsEmail, IsInt, IsString } from 'class-validator';
 
 export class UserDto {
+  _id: string;
+
   @IsEmail()
   email: string;
 

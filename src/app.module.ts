@@ -23,8 +23,8 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
 
-    UsersModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
