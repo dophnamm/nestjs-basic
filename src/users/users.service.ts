@@ -16,6 +16,10 @@ export class UsersService {
     return bcrypt.hashSync(password, 10);
   }
 
+  async checkPassword(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compareSync(password, hash);
+  }
+
   async create(createUserDto: UserDto): Promise<UserDto> {
     const hashPassword = this.getHashPassword(createUserDto.password);
 
@@ -35,6 +39,12 @@ export class UsersService {
 
   async findOne(_id: string): Promise<UserDto> {
     const response = await this.userModel.findOne({ _id });
+
+    return response;
+  }
+
+  async findOneByEmail(email: string): Promise<UserDto> {
+    const response = await this.userModel.findOne({ email });
 
     return response;
   }
