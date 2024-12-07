@@ -18,6 +18,9 @@ import { AuthService } from './auth/auth.service';
 
 import { LocalAuthGuard } from './auth/guard/local-auth.guard';
 
+import { Public } from './decorators/public.decorator';
+
+@Public()
 @Controller()
 export class AppController {
   constructor(
@@ -41,7 +44,6 @@ export class AppController {
     return req.user;
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req: Request) {
     return this.authService.login(req.body as unknown as AuthenticationPayload);
