@@ -9,10 +9,7 @@ import {
 
 import { AppService } from './app.service';
 
-import {
-  AuthenticatedRequest,
-  AuthenticationPayload,
-} from './auth/dto/auth.dto';
+import { AuthenticatedRequest } from './auth/dto/auth.dto';
 
 import { AuthService } from './auth/auth.service';
 
@@ -39,13 +36,8 @@ export class AppController {
   }
 
   @UseGuards(LocalAuthGuard)
-  @Post('basic-login')
-  basicLogin(@Request() req: AuthenticatedRequest) {
-    return req.user;
-  }
-
   @Post('login')
-  login(@Request() req: Request) {
-    return this.authService.login(req.body as unknown as AuthenticationPayload);
+  login(@Request() req: AuthenticatedRequest) {
+    return this.authService.login(req.user);
   }
 }
