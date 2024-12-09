@@ -2,10 +2,12 @@ import { v4 as uuidV4 } from 'uuid';
 import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type UserDocument = HydratedDocument<User>;
+import { UserDto } from 'src/users/dto/user.dto';
+
+export type CompanyDocument = HydratedDocument<Company>;
 
 @Schema({ timestamps: true })
-export class User {
+export class Company {
   @Prop({
     type: String,
     default: function genUUID() {
@@ -15,22 +17,22 @@ export class User {
   _id: string;
 
   @Prop({ required: true })
-  email: string;
+  name: string;
 
   @Prop({ required: true })
-  username: string;
-
-  @Prop({ required: true })
-  password: string;
-
-  @Prop()
-  age: number;
-
-  @Prop()
-  phoneNumber: number;
-
-  @Prop()
   address: string;
+
+  @Prop({ required: true })
+  description: string;
+
+  @Prop({ type: Object })
+  createdBy: UserDto;
+
+  @Prop({ type: Object, default: null })
+  updatedBy: UserDto;
+
+  @Prop({ type: Object, default: null })
+  deletedBy: UserDto;
 
   @Prop({ type: Date, default: Date.now() })
   createdAt: Date;
@@ -45,4 +47,4 @@ export class User {
   deletedAt: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const CompanySchema = SchemaFactory.createForClass(Company);
