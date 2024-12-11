@@ -8,6 +8,9 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { User } from 'src/decorators/user.decorator';
+
+import { UserDto } from 'src/users/dto/user.dto';
 import { CompanyDto } from './dto/company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
@@ -18,8 +21,8 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CompanyDto) {
-    return this.companiesService.create(createCompanyDto);
+  create(@Body() createCompanyDto: CompanyDto, @User() user: UserDto) {
+    return this.companiesService.create(createCompanyDto, user);
   }
 
   @Get()
@@ -29,16 +32,20 @@ export class CompaniesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.companiesService.findOne(+id);
+    return this.companiesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companiesService.update(+id, updateCompanyDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+    @User() user: UserDto,
+  ) {
+    return this.companiesService.update(id, updateCompanyDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companiesService.remove(+id);
+  remove(@Param('id') id: string, @User() user: UserDto) {
+    return this.companiesService.remove(id, user);
   }
 }

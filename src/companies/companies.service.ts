@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 
+import { UserDto } from 'src/users/dto/user.dto';
 import { CompanyDto } from './dto/company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
@@ -14,25 +15,44 @@ export class CompaniesService {
     private companyModel: SoftDeleteModel<CompanyDocument>,
   ) {}
 
-  async create(createCompanyDto: CompanyDto): Promise<CompanyDto> {
-    const response = await this.companyModel.create(createCompanyDto);
+  async create(
+    createCompanyDto: CompanyDto,
+    user: UserDto,
+  ): Promise<CompanyDto> {
+    const response = await this.companyModel.create({
+      ...createCompanyDto,
+      createdBy: user,
+    });
 
     return response;
   }
 
-  findAll() {
-    return `This action returns all companies`;
+  async findAll() {
+    const response = await this.companyModel.find();
+
+    return response;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  async findOne(_id: string) {
+    const response = await this.companyModel.find({ _id });
+
+    return response;
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+  async update(_id: string, updateCompanyDto: UpdateCompanyDto, user: UserDto) {
+    const response = await this.companyModel.findOneAndUpdate(
+      { _id },
+      { ...updateCompanyDto, updatedBy: user },
+      { upsert: true, returnOriginal: false },
+    );
+
+    return response;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} company`;
+  async remove(_id: string, user: UserDto) {
+    await this.companyModel.updateOne({ _id }, { deletedBy: user });
+    const response = await this.companyModel.softDelete({ _id });
+
+    return response;
   }
 }

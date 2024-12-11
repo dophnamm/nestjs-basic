@@ -1,29 +1,13 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Render,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 
 import { AppService } from './app.service';
-
-import { AuthenticatedRequest } from './auth/dto/auth.dto';
-
-import { AuthService } from './auth/auth.service';
-
-import { LocalAuthGuard } from './auth/guard/local-auth.guard';
 
 import { Public } from './decorators/public.decorator';
 
 @Public()
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private authService: AuthService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get('/health-check')
   @Render('healthCheck')
@@ -33,11 +17,5 @@ export class AppController {
     return {
       messages,
     };
-  }
-
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  login(@Request() req: AuthenticatedRequest) {
-    return this.authService.login(req.user);
   }
 }

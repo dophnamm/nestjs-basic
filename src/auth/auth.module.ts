@@ -8,6 +8,8 @@ import { LocalStrategy } from './passport/local.strategy';
 
 import { AuthService } from './auth.service';
 
+import { AuthController } from './auth.controller';
+
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
@@ -26,6 +28,7 @@ import { UsersModule } from 'src/users/users.module';
     UsersModule,
   ],
   providers: [AuthService, JwtStrategy, LocalStrategy],
+  controllers: [AuthController],
   exports: [AuthService],
 })
 export class AuthModule {}

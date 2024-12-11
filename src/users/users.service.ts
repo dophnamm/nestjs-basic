@@ -34,13 +34,13 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserDto[]> {
-    const response = await this.userModel.find();
+    const response = await this.userModel.find().select('-password');
 
     return response;
   }
 
   async findOne(_id: string): Promise<UserDto> {
-    const response = await this.userModel.findOne({ _id });
+    const response = await this.userModel.findOne({ _id }).select('-password');
 
     return response;
   }
